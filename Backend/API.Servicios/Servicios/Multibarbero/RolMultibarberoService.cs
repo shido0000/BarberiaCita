@@ -1,84 +1,90 @@
 using API.Data.Entidades.Multibarbero;
-using API.DTOs.Multibarbero.Request;
-using API.DTOs.Multibarbero.Response;
+using API.Data.IUnitOfWorks.Interfaces;
+using API.Domain.Interfaces.Servicios.Multibarbero;
+using API.Application.Dtos.Multibarbero.RolMultibarbero;
+using API.Application.Dtos.Comunes;
 using AutoMapper;
-using Microsoft.EntityFrameworkCore;
+using FluentValidation;
 
 namespace API.Servicios.Servicios.Multibarbero
 {
-    /// <summary>
-    /// Servicio para gestionar roles del sistema Multibarbero
-    /// </summary>
-    public class RolMultibarberoService
+    public class RolMultibarberoService : IRolMultibarberoService
     {
-        private readonly DbContext _context;
+        private readonly IUnitOfWork<RolMultibarbero> _unitOfWork;
         private readonly IMapper _mapper;
+        private readonly IValidator<CrearRolMultibarberoInputDto> _validator;
 
-        public RolMultibarberoService(DbContext context, IMapper mapper)
+        public RolMultibarberoService(
+            IUnitOfWork<RolMultibarbero> unitOfWork,
+            IMapper mapper,
+            IValidator<CrearRolMultibarberoInputDto> validator)
         {
-            _context = context;
+            _unitOfWork = unitOfWork;
             _mapper = mapper;
+            _validator = validator;
         }
 
-        public async Task<List<RolMultibarberoResponse>> ObtenerTodosAsync()
+        public async Task<ListadoPaginadoDto<RolMultibarberoDto>> ObtenerListadoPaginado(FiltrarConfigurarListadoPaginadoRolMultibarberoInputDto filtro)
         {
-            var roles = await _context.Set<RolMultibarbero>()
-                .Where(r => r.Activo)
-                .OrderBy(r => r.Nombre)
-                .ToListAsync();
+            var query = _unitOfWork.Repository.ObtenerTodos();
 
-            return _mapper.Map<List<RolMultibarberoResponse>>(roles);
+            if (!string.IsNullOrWhiteSpace(filtro.Nombre))
+                query = query.Where(x => x.Nombre.Contains(filtro.Nombre));
+
+            if (filtro.Activo.HasValue)
+                query = query.Where(x => x.Activo == filtro.Activo.Value);
+
+            var listadoPaginado = await _unitOfWork.ObtenerListadoPaginado(query, filtro);
+            return _mapper.Map<ListadoPaginadoDto<RolMultibarberoDto>>(listadoPaginado);
         }
 
-        public async Task<RolMultibarberoResponse?> ObtenerPorIdAsync(Guid id)
+        public async Task<RolMultibarberoDto> ObtenerPorId(Guid id)
         {
-            var rol = await _context.Set<RolMultibarbero>()
-                .FirstOrDefaultAsync(r => r.Id == id);
+            var entidad = await _unitOfWork.Repository.ObtenerPorId(id);
+            if (entidad == null)
+                throw new KeyNotFoundException($"No se encontró el rol con ID {id}");
 
-            return rol != null ? _mapper.Map<RolMultibarberoResponse>(rol) : null;
+            return _mapper.Map<RolMultibarberoDto>(entidad);
         }
 
-        public async Task<RolMultibarberoResponse> CrearAsync(RolMultibarberoRequest request)
+        public async Task<RolMultibarberoDto> Crear(CrearRolMultibarberoInputDto dto)
         {
-            var rol = _mapper.Map<RolMultibarbero>(request);
-            rol.Id = Guid.NewGuid();
-            rol.FechaCreacion = DateTime.UtcNow;
+            var validacion = await _validator.ValidateAsync(dto);
+            if (!validacion.IsValid)
+                throw new ValidationException(validacion.Errors);
 
-            await _context.Set<RolMultibarbero>().AddAsync(rol);
-            await _context.SaveChangesAsync();
+            var entidad = _mapper.Map<RolMultibarbero>(dto);
+            await _unitOfWork.Repository.Crear(entidad);
+            await _unitOfWork.GuardarCambiosAsync();
 
-            return _mapper.Map<RolMultibarberoResponse>(rol);
+            return _mapper.Map<RolMultibarberoDto>(entidad);
         }
 
-        public async Task<RolMultibarberoResponse?> ActualizarAsync(Guid id, RolMultibarberoRequest request)
+        public async Task<RolMultibarberoDto> Actualizar(ActualizarRolMultibarberoInputDto dto)
         {
-            var rol = await _context.Set<RolMultibarbero>()
-                .FirstOrDefaultAsync(r => r.Id == id);
+            var validacion = await _validator.ValidateAsync(dto);
+            if (!validacion.IsValid)
+                throw new ValidationException(validacion.Errors);
 
-            if (rol == null)
-                return null;
+            var entidad = await _unitOfWork.Repository.ObtenerPorId(dto.Id);
+            if (entidad == null)
+                throw new KeyNotFoundException($"No se encontró el rol con ID {dto.Id}");
 
-            _mapper.Map(request, rol);
-            rol.FechaModificacion = DateTime.UtcNow;
+            _mapper.Map(dto, entidad);
+            _unitOfWork.Repository.Actualizar(entidad);
+            await _unitOfWork.GuardarCambiosAsync();
 
-            await _context.SaveChangesAsync();
-
-            return _mapper.Map<RolMultibarberoResponse>(rol);
+            return _mapper.Map<RolMultibarberoDto>(entidad);
         }
 
-        public async Task<bool> EliminarAsync(Guid id)
+        public async Task Eliminar(Guid id)
         {
-            var rol = await _context.Set<RolMultibarbero>()
-                .FirstOrDefaultAsync(r => r.Id == id);
+            var entidad = await _unitOfWork.Repository.ObtenerPorId(id);
+            if (entidad == null)
+                throw new KeyNotFoundException($"No se encontró el rol con ID {id}");
 
-            if (rol == null)
-                return false;
-
-            rol.Activo = false;
-            rol.FechaModificacion = DateTime.UtcNow;
-
-            await _context.SaveChangesAsync();
-            return true;
+            _unitOfWork.Repository.Eliminar(entidad);
+            await _unitOfWork.GuardarCambiosAsync();
         }
     }
 }
