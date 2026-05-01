@@ -4,29 +4,34 @@
 __pycache__/
 *.o
 *.obj
-*.exe
 *.dll
 *.so
-*.a
+*.exe
+*.class
 *.out
 
 # Dependencies
-node_modules/
-venv/
 .venv/
-.env
-.env.local
-*.env.*
-
-# Build directories
-dist/
-build/
+venv/
+node_modules/
 target/
+.gradle/
+.mypy_cache/
+.pytest_cache/
+coverage/
+htmlcov/
+.coverage
 
 # Logs and temp files
 *.log
 *.tmp
 *.swp
+*.swo
+
+# Environment
+.env
+.env.local
+*.env.*
 
 # Editors
 .vscode/
@@ -35,61 +40,4 @@ target/
 # System files
 .DS_Store
 Thumbs.db
-
-# Coverage
-coverage/
-htmlcov/
-.coverage
-
-# Python specific
-*.pyc
-__pycache__/
-*.pyo
-*.pyd
-.Python
-*.so
-
-# C# specific
-bin/
-obj/
-*.user
-*.userosscache
-*.suo
-*.pdb
-*.ilk
-*.meta
-*.cache
-*.idb
-*.aps
-*.ncb
-*.opt
-*.plg
-*.vbw
-*.vbs
-*.tlb
-*.tli
-*.tlh
-*.tmp
-*.rsp
-*.log
-*.csproj.user
-*.vbproj.user
-*.fsproj.user
-*.userprefs
-*.sln.docstates
-
-# NuGet
-packages/
-*.nupkg
-*.snupkg
-*.nuspec
-
-# Visual Studio Code
-.vscode/settings.json
-
-# OS generated files
-ehthumbs.db
-Icon?
-desktop.ini
-$LATEST$
 ```
