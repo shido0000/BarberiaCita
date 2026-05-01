@@ -1,1 +1,95 @@
-Nothing should be ignored in this case, as only a markdown file (PLAN_IMPLEMENTACION_MULTIBARBERO.md) was added without any build artifacts, dependencies, or temporary files.
+```
+# Compiled and build artifacts
+*.pyc
+__pycache__/
+*.o
+*.obj
+*.exe
+*.dll
+*.so
+*.a
+*.out
+
+# Dependencies
+node_modules/
+venv/
+.venv/
+.env
+.env.local
+*.env.*
+
+# Build directories
+dist/
+build/
+target/
+
+# Logs and temp files
+*.log
+*.tmp
+*.swp
+
+# Editors
+.vscode/
+.idea/
+
+# System files
+.DS_Store
+Thumbs.db
+
+# Coverage
+coverage/
+htmlcov/
+.coverage
+
+# Python specific
+*.pyc
+__pycache__/
+*.pyo
+*.pyd
+.Python
+*.so
+
+# C# specific
+bin/
+obj/
+*.user
+*.userosscache
+*.suo
+*.pdb
+*.ilk
+*.meta
+*.cache
+*.idb
+*.aps
+*.ncb
+*.opt
+*.plg
+*.vbw
+*.vbs
+*.tlb
+*.tli
+*.tlh
+*.tmp
+*.rsp
+*.log
+*.csproj.user
+*.vbproj.user
+*.fsproj.user
+*.userprefs
+*.sln.docstates
+
+# NuGet
+packages/
+*.nupkg
+*.snupkg
+*.nuspec
+
+# Visual Studio Code
+.vscode/settings.json
+
+# OS generated files
+ehthumbs.db
+Icon?
+desktop.ini
+$LATEST$
+```
