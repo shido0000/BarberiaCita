@@ -1,5 +1,6 @@
 ﻿using API.Application.Mapper.Nomencladores;
 using API.Application.Mapper.Seguridad;
+using API.Application.Mapper.Multibarbero;
 using AutoMapper;
 
 namespace API.Application.Mapper
@@ -21,6 +22,9 @@ namespace API.Application.Mapper
             cfg.AddProfile<OrigenDtoProfile>();
             cfg.AddProfile<GrupoDtoProfile>();
             cfg.AddProfile<FamiliaDtoProfile>();
+
+            // Perfiles Multibarbero
+            cfg.AddProfile<MultibarberoDtoProfile>();
 
             return cfg;
         }
