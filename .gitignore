@@ -1,16 +1,19 @@
 ```
-# Build artifacts
-bin/
-obj/
+# Build artifacts and binaries
 *.dll
 *.exe
 *.pdb
-*.config
-*.csproj.user
+*.so
+*.dylib
+*.class
+*.o
+*.obj
+*.out
 
 # Dependencies
 packages/
-node_modules/
+bin/
+obj/
 
 # Logs
 *.log
@@ -20,15 +23,19 @@ node_modules/
 .env.local
 *.env.*
 
-# Editors
+# Editor/IDE
+.vs/
 .vscode/
 .idea/
-*.suo
+*.userprefs
 *.user
+*.suo
 *.userosscache
 *.sln.docstates
 
 # OS generated files
 .DS_Store
 Thumbs.db
+ehthumbs.db
+Icon?
 ```
