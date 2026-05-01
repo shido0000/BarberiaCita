@@ -1,10 +1,13 @@
 using API.Data.Repositorios.Multibarbero;
 using API.Dominio.Entidades.Multibarbero;
 using Microsoft.EntityFrameworkCore;
+using API.Domain.Interfaces.Servicios.Multibarbero;
+using API.Application.Dtos.Multibarbero.Reserva;
+using API.Application.Dtos.Comunes;
 
 namespace API.Servicios.Servicios.Multibarbero
 {
-    public class ReservaServicio : IReservaServicio
+    public class ReservaServicio : IReservaService, IReservaServicio
     {
         private readonly IRepositorioBase<Reserva> _reservaRepositorio;
         private readonly IUsuarioBarberoRepositorio _barberoRepositorio;

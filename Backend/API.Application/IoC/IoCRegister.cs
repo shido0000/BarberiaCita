@@ -7,9 +7,11 @@ using API.Data.IUnitOfWorks.Repositorios;
 using API.Domain.Interfaces;
 using API.Domain.Interfaces.Nomencladores;
 using API.Domain.Interfaces.Seguridad;
+using API.Domain.Interfaces.Servicios.Multibarbero;
 using API.Domain.Services;
 using API.Domain.Services.Nomencladores;
 using API.Domain.Services.Seguridad;
+using API.Servicios.Servicios.Multibarbero;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using Hangfire;
@@ -194,6 +196,16 @@ namespace API.Application.IoC
             services.AddScoped<IFamiliaService, FamiliaService>();
 
             services.AddScoped(typeof(IBaseService<EntidadBase, AbstractValidator<EntidadBase>>), typeof(BasicService<EntidadBase, AbstractValidator<EntidadBase>>));
+
+            // Servicios Multibarbero
+            services.AddScoped<IRolMultibarberoService, RolMultibarberoService>();
+            services.AddScoped<IPlanSuscripcionService, PlanSuscripcionService>();
+            services.AddScoped<IUsuarioBarberoService, UsuarioBarberoService>();
+            services.AddScoped<IUsuarioBarberiaService, UsuarioBarberiaService>();
+            services.AddScoped<IUsuarioClienteService, UsuarioClienteService>();
+            services.AddScoped<IServicioService, ServicioService>();
+            services.AddScoped<IReservaService, ReservaServicio>();
+            services.AddScoped<INotificacionService, NotificacionService>();
 
             return services;
         }
