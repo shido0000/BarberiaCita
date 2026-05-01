@@ -1,22 +1,19 @@
 ```
-# Compiled and build artifacts
-*.o
-*.obj
+# Build artifacts and binaries
 *.exe
 *.dll
 *.so
 *.a
+*.obj
 *.out
+bin/
+obj/
+Debug/
+Release/
 
 # Dependencies
 node_modules/
-venv/
-.venv/
-__pycache__/
-.mypy_cache/
-.pytest_cache/
-target/
-.gradle/
+packages/
 
 # Logs and temp files
 *.log
@@ -31,21 +28,22 @@ target/
 # Editors
 .vscode/
 .idea/
+*.userprefs
 
-# OS specific
+# OS generated files
 .DS_Store
 Thumbs.db
 
-# Coverage
+# Coverage reports
 coverage/
 htmlcov/
-.coverage
+*.coverage
 
-# Build directories (if present)
-dist/
-build/
-bin/
-obj/
-Debug/
-Release/
+# Package manager
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Local configuration
+local.properties
 ```
